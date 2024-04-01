@@ -1,0 +1,62 @@
+.heading {
+    color: rgb(142, 141, 141);
+}
+
+.social-icons a i {
+    color: gray;
+    /* position: sticky;
+    bottom: 0; */
+}
+
+@media (max-width: 768px) {
+    .social-icons a i {
+        font-size: 34px;
+        /* Adjust this value to suit your needs */
+    }
+}
+
+body {
+    padding-top: 50px;
+    margin-bottom: 60px;
+    font-family: 'Space Grotesk', sans-serif;
+    /* Adjust this value based on the height of your navbar */
+}
+
+.nav-item .nav-link {
+    background-color: white;
+    padding: 10px;
+    color: white;
+    /* Change the text color to white for better contrast */
+}
+
+.card-title {
+    font-size: large;
+}
+
+.portrait {
+    float: right;
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    /* margin-right: 20px; */
+    /* Adds some space between the image and the text */
+}
+
+
+.btn btn-primary {
+    background-color: #155ded;
+    color: white;
+
+}
+
+.card img {
+    max-width: 100%;
+    height: auto;
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
