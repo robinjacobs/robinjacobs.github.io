@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photography</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="assets/styles.css">
+
+</head>
+
+<body>
+    <nav id="navbar-ph" class="navbar navbar-light navbar-expand-sm fixed-top">
+        <div class="container">
+            <ul class="navbar-nav ml-auto flex-nowrap">
+                <li class="nav-item active">
+                    <a class="nav-link" href="index.html">
+                        about<span class="sr-only">(current)</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="bg-light text-center py-5">
+        <h1 class="display-4">photos</h1>
+        <p class="lead">by robin jacobs</p>
+    </header>
+
+
+    <div class="container my-5">
+        <div class="row g-4">
+            <!-- Photo Card -->
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="photo-card text-center">
+                    <img src="assets/images/english-garden-river.JPG" class="img-fluid rounded"
+                        alt="Englischer Garten, Munich" data-bs-toggle="modal" data-bs-target="#imageModal"
+                        data-bs-full="assets/images/english-garden-river.JPG" data-bs-title="Englischer Garten, Munich"
+                        data-bs-date="September 2024, Sony A7C + Sigma 28-70mm f/2.8 DG DN">
+                    <div class="photo-caption mt-3">
+                        <p class="text-muted mb-1">September 2024</p> <!-- Date -->
+                        <h5 class="fw-bold mb-1">Englischer Garten, Munich</h5> <!-- Title -->
+                        <div class="separator-line"></div> <!-- Line -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="photo-card text-center">
+                    <img src="assets/images/hamburg.JPG" class="img-fluid rounded" alt="Oberbaumbrücke, Hamburg"
+                        data-bs-toggle="modal" data-bs-target="#imageModal" data-bs-full="assets/images/hamburg.JPG"
+                        data-bs-title="Oberbaumbrücke, Hamburg" data-bs-date="September 2023, Sony A7C + Sony FE 40mm">
+                    <div class="photo-caption mt-3">
+                        <p class="text-muted mb-1">September 2023</p> <!-- Date -->
+                        <h5 class="fw-bold mb-1">Oberbaumbrücke, Hamburg</h5> <!-- Title -->
+                        <div class="separator-line"></div> <!-- Line -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal for Full-Screen Image -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <img src="" class="img-fluid" alt="" id="modalImage">
+                </div>
+                <div class="modal-footer justify-content-between border-0">
+                    <div>
+                        <h5 id="modalTitle" class="fw-bold mb-1"></h5>
+                        <p id="modalDate" class="text-muted mb-0"></p>
+                    </div>
+                    <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 
+    <footer class="bg-light text-center py-3 mt-5">
+        <p class="mb-0">&copy; Robin Jacobs</p>
+    </footer> -->
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- <script src="scripts.js"></script> -->
+    <script>
+        // Script to dynamically update the modal content
+        const imageModal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDate = document.getElementById('modalDate');
+
+        imageModal.addEventListener('show.bs.modal', function (event) {
+            const trigger = event.relatedTarget; // Image that triggered the modal
+            const fullImage = trigger.getAttribute('data-bs-full');
+            const title = trigger.getAttribute('data-bs-title');
+            const date = trigger.getAttribute('data-bs-date');
+
+            modalImage.src = fullImage;
+            modalTitle.textContent = title;
+            modalDate.textContent = date;
+        });
+    </script>
+
+    <script>
+        var prevScrollpos = window.pageYOffset;
+        window.onscroll = function () {
+            var currentScrollPos = window.pageYOffset;
+            if (prevScrollpos > currentScrollPos) {
+                document.getElementById("navbar-ph").style.top = "0";
+            } else {
+                document.getElementById("navbar-ph").style.top = "-50px";
+            }
+            prevScrollpos = currentScrollPos;
+        }
+    </script>
+</body>
+
+</html>

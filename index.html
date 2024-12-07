@@ -14,7 +14,7 @@
 
 <body>
     <nav id="navbar" class="navbar navbar-light  navbar-expand-sm fixed-top">
-        <div class="container">
+        <div class="nav-container">
             <ul class="navbar-nav ml-auto flex-nowrap">
                 <li class="nav-item active">
                     <a class="nav-link" href="#about">
@@ -240,6 +240,10 @@
         </a>
         <a href="https://orcid.org/0009-0005-8500-7731" target="_blank" class="mr-3">
             <i class="fab fa-orcid fa-lg"></i>
+        </a>
+        <a href="gallery.html" target="_blank" class="mr-3">
+            <i class="fas fa-image fa-lg"></i>
+        </a>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -265,6 +269,21 @@
                 }
             });
         });
+    </script>
+
+    <script>
+        var prevScrollpos = window.pageYOffset;
+        window.onscroll = function () {
+            var currentScrollPos = window.pageYOffset;
+            var navContainer = document.querySelector('.nav-container');
+
+            if (prevScrollpos > currentScrollPos) {
+                navContainer.classList.add('visible');
+            } else {
+                navContainer.classList.remove('visible');
+            }
+            prevScrollpos = currentScrollPos;
+        }
     </script>
 
 </body>
