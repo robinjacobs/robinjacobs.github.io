@@ -15,12 +15,18 @@
 <body>
 
     <nav id="navbar-ph" class="navbar navbar-expand-sm fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="#">robin jacobs</a>
+        <span class="navbar-brand">robin jacobs</span>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="border: none;">
+            <span class="navbar-toggler-icon"
+                style="background-image: url('data:image/svg+xml;charset=utf8,%3Csvg viewBox=%270 0 30 30%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cpath stroke=%27%23000%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-miterlimit=%2710%27 d=%27M4 7h22M4 15h22M4 23h22%27/%3E%3C/svg%3E');"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active"><a class="nav-link" href="#about">about</a></li>
                 <li class="nav-item"><a class="nav-link" href="#work">work</a></li>
                 <li class="nav-item"><a class="nav-link" href="#cv">cv</a></li>
+                <li class="nav-item"><a class="nav-link" href="gallery.html">photography</a></li>
             </ul>
         </div>
     </nav>
@@ -189,6 +195,8 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         var prevScrollpos = window.pageYOffset;
         window.onscroll = function () {
