@@ -1,126 +1,100 @@
-.heading {
-    color: rgb(142, 141, 141);
-}
-
-.social-icons a i {
-    color: gray;
-    /* position: sticky;
-    bottom: 0; */
-}
-
-@media (max-width: 768px) {
-    .social-icons a i {
-        font-size: 34px;
-        /* Adjust this value to suit your needs */
-    }
+/* Variables & Base */
+:root {
+    --bg-color: #fafafa;
+    --text-main: #1a1a1a;
+    --text-muted: #999;
+    --accent: #555;
+    --card-bg: #ffffff;
 }
 
 body {
-    padding-top: 50px;
-    margin-bottom: 60px;
     font-family: 'Space Grotesk', sans-serif;
-    /* Adjust this value based on the height of your navbar */
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
 }
 
-.nav-container {
-    background-color: white;
-    border-radius: 12px;
-    display: inline-flex;
-    padding: 4px;
-    position: fixed;
-    top: 10px;
-    right: -250px;
-    /* Start off-screen */
-    z-index: 1000;
-    transition: right 0.5s ease-in-out;
-    /* Add smooth transition */
+/* Navbar: Appearing Top-Down Logic */
+.navbar {
+    background: rgba(250, 250, 250, 0.95) !important;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 0.8rem 1rem;
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transform: translateY(-100%);
+    /* Hidden by default */
 }
 
-.nav-container.visible {
-    right: 4px;
-    /* Slide to the original position */
+/* Class to trigger the slide down */
+.navbar.visible {
+    transform: translateY(0);
 }
 
-.nav-item .nav-link {
-    background-color: white;
-    padding: 6px 12px;
-    color: white;
-    border-radius: 12px;
-    /* Change the text color to white for better contrast */
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: -1px;
+    text-transform: lowercase;
+    /* Forces all lowercase */
+    color: var(--text-main) !important;
 }
 
-#navbar-ph {
-    transition: top 0.5s ease-in-out;
-    /* Smooth transition */
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
+.nav-link {
+    font-weight: 500;
+    text-transform: lowercase;
+    color: var(--text-muted) !important;
+    transition: color 0.3s ease;
 }
 
-.card-title {
-    font-size: large;
+.nav-item.active .nav-link,
+.nav-link:hover {
+    color: var(--text-main) !important;
+}
+
+/* Section Spacing & Content */
+section {
+    padding-top: 100px;
+}
+
+.name {
+    font-weight: 700;
+    letter-spacing: -2px;
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
 }
 
 .portrait {
-    float: right;
-    width: 250px;
-    height: 250px;
-    border-radius: 50%;
-    /* margin-right: 20px; */
-    /* Adds some space between the image and the text */
-}
-
-
-.btn btn-primary {
-    background-color: #155ded;
-    color: white;
-
-}
-
-.card img {
-    max-width: 100%;
-    height: auto;
-}
-
-.title {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
-/* Photography Page*/
-/* Responsive grid spacing */
-.row.g-4 {
-    row-gap: 1.5rem;
-}
-
-/* Ensure the modal image occupies full width */
-.modal-body img {
     width: 100%;
-    height: auto;
-    /* border-radius: 8px; */
+    max-width: 280px;
+    border-radius: 4px;
+    filter: grayscale(20%);
 }
 
-/* Customize the modal footer */
-.modal-footer {
-    padding: 1rem;
-    background: #f8f9fa;
+.card {
+    background: var(--card-bg);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 4px !important;
+    transition: all 0.4s ease;
+    margin-bottom: 24px;
 }
 
-/* Separator line */
-/* Style for the faint gray dot */
-.separator-line {
-    display: block;
-    width: 50px;
-    /* Length of the line */
-    height: 4px;
-    /* Thickness of the line */
-    border-radius: 50px;
-    /* Makes the corners rounded */
-    background-color: rgba(0, 0, 0, 0.1);
-    /* Faint gray color */
-    margin: 10px auto;
-    /* Centers the line and adds space around it */
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.social-icons {
+    background: rgba(250, 250, 250, 0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 15px;
+}
+
+.social-icons a {
+    color: var(--text-muted);
+    margin: 0 12px;
+}
+
+.social-icons a:hover {
+    color: var(--text-main);
 }
