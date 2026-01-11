@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>blog | robin jacobs</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../assets/styles.css">
+
+    <style>
+        /* Blog Specific Styles */
+        .blog-post-card {
+            padding: 2rem;
+            margin-bottom: 3rem;
+            border-radius: 12px !important;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            background: #fff;
+        }
+
+        .post-metadata {
+            font-size: 0.85rem;
+            text-transform: lowercase;
+            color: #999;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.5px;
+        }
+
+        .post-content {
+            font-size: 1.05rem;
+            color: var(--text-main);
+            margin-bottom: 2rem;
+        }
+
+        /* The "Start" Like Button */
+        .like-container {
+            display: flex;
+            align-items: center;
+            border-top: 1px solid #f5f5f5;
+            padding-top: 1.5rem;
+        }
+
+        .like-button {
+            background: #f0f0f0;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 50px;
+            color: #1a1a1a;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: lowercase;
+            display: flex;
+            align-items: center;
+        }
+
+        .like-button i {
+            margin-right: 8px;
+            font-size: 0.9rem;
+        }
+
+        .like-button:hover {
+            background: #e5e5e5;
+            transform: translateY(-1px);
+        }
+
+        .like-button.liked {
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        .like-count {
+            margin-left: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #1a1a1a;
+        }
+    </style>
+</head>
+
+<body>
+    <nav id="navbar-ph" class="navbar navbar-expand-sm fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">robin jacobs</a>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="../index.html#about">about</a></li>
+                <li class="nav-item"><a class="nav-link" href="../index.html#work">work</a></li>
+                <li class="nav-item"><a class="nav-link" href="../index.html#cv">cv</a></li>
+                <li class="nav-item"><a class="nav-link" href="gallery.html">gallery</a></li>
+                <li class="nav-item active"><a class="nav-link" href="#">blog</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <section id="blog-section">
+            <h1 class="name">blog</h1>
+            <div id="blog-posts">
+            </div>
+        </section>
+    </div>
+
+    <div class="social-icons d-flex justify-content-center fixed-bottom">
+        <a href="https://github.com/robinjacobs" target="_blank"><i class="fab fa-github fa-lg"></i></a>
+        <a href="https://scholar.google.com/citations?user=yo8FELUAAAAJ&hl=de" target="_blank"><i
+                class="fas fa-graduation-cap fa-lg"></i></a>
+        <a href="https://www.linkedin.com/in/robin-jacobs-45981a175/" target="_blank"><i
+                class="fab fa-linkedin fa-lg"></i></a>
+        <a href="mailto:robin@jacobs.swiss"><i class="fas fa-envelope fa-lg"></i></a>
+        <a href="https://orcid.org/0009-0005-8500-7731" target="_blank"><i class="fab fa-orcid fa-lg"></i></a>
+        <a href="../gallery.html" target="_blank"><i class="fas fa-image fa-lg"></i></a>
+        <a href="blog.html" target="_blank"><i class="fas fa-blog fa-lg"></i></a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const postsContainer = document.getElementById('blog-posts');
+
+            // 1. Load Posts
+            fetch('../posts.json')
+                .then(res => res.json())
+                .then(posts => {
+                    posts.forEach(postFile => {
+                        fetch(`../_posts/${postFile}`)
+                            .then(res => res.text())
+                            .then(text => {
+                                const post = parseMarkdown(text, postFile);
+                                const postCard = createPostCard(post);
+                                postsContainer.appendChild(postCard);
+                            });
+                    });
+                });
+
+            // 2. Navbar Reveal
+            window.onscroll = function () {
+                const nav = document.getElementById("navbar-ph");
+                if (window.pageYOffset > 50) nav.classList.add("visible");
+                else nav.classList.remove("visible");
+            }
+
+            // 3. Parser
+            function parseMarkdown(text, filename) {
+                const lines = text.split('\n');
+                const meta = {};
+                let content = '';
+                let inMeta = false;
+                if (lines[0]?.trim() === '---') { inMeta = true; lines.shift(); }
+                for (let i = 0; i < lines.length; i++) {
+                    if (inMeta) {
+                        if (lines[i].trim() === '---') inMeta = false;
+                        else {
+                            const d = lines[i].indexOf(':');
+                            if (d !== -1) meta[lines[i].slice(0, d).trim()] = lines[i].slice(d + 1).trim().replace(/^"|"$/g, '');
+                        }
+                    } else content += lines[i] + '\n';
+                }
+                return { ...meta, content: content.trim(), slug: filename.replace('.md', '') };
+            }
+
+            // 4. Card Creator (Only 1 Like Button)
+            function createPostCard(post) {
+                const card = document.createElement('div');
+                card.className = 'card blog-post-card shadow-sm';
+                card.innerHTML = `
+                    <div class="card-body">
+                        <h2 class="card-title" style="font-weight:700; letter-spacing:-0.5px;">${post.title || 'Untitled'}</h2>
+                        <div class="post-metadata">By ${post.author || 'Robin Jacobs'} • ${post.date || ''}</div>
+                        <div class="post-content">${marked.parse(post.content)}</div>
+                        <div class="like-container">
+                            <button class="like-button">
+                                <i class="far fa-heart"></i> like
+                            </button>
+                            <span class="like-count">0</span>
+                        </div>
+                    </div>`;
+
+                const btn = card.querySelector('.like-button');
+                const countSpan = card.querySelector('.like-count');
+
+                // Initialize logic for this specific card
+                handleLikeLogic(btn, countSpan, post.slug);
+
+                return card;
+            }
+
+            // 5. Like Logic
+            function handleLikeLogic(button, countSpan, slug) {
+                let count = parseInt(localStorage.getItem(`likes-${slug}`) || '0');
+                let isLiked = localStorage.getItem(`hasLiked-${slug}`) === 'true';
+
+                countSpan.textContent = count;
+                if (isLiked) {
+                    button.classList.add('liked');
+                    button.querySelector('i').className = 'fas fa-heart';
+                }
+
+                button.addEventListener('click', () => {
+                    if (!isLiked) {
+                        count++;
+                        isLiked = true;
+                        button.classList.add('liked');
+                        button.querySelector('i').className = 'fas fa-heart';
+                    } else {
+                        count--;
+                        isLiked = false;
+                        button.classList.remove('liked');
+                        button.querySelector('i').className = 'far fa-heart';
+                    }
+                    countSpan.textContent = count;
+                    localStorage.setItem(`likes-${slug}`, count);
+                    localStorage.setItem(`hasLiked-${slug}`, isLiked);
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
