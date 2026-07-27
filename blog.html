@@ -19,6 +19,58 @@
             border-radius: 12px !important;
             border: 1px solid rgba(0, 0, 0, 0.05);
             background: #fff;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .blog-post-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08) !important;
+        }
+
+        .blog-post-card:focus-visible {
+            outline: 2px solid #1a1a1a;
+            outline-offset: 4px;
+        }
+
+        .post-excerpt {
+            font-size: 1.05rem;
+            color: var(--text-main);
+            margin-bottom: 2rem;
+        }
+
+        .card-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid #f5f5f5;
+            padding-top: 1.5rem;
+        }
+
+        .card-actions .like-container {
+            border-top: none;
+            padding-top: 0;
+        }
+
+        .read-more {
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            text-transform: lowercase;
+            color: #999;
+            white-space: nowrap;
+        }
+
+        .read-more i {
+            margin-left: 6px;
+            transition: transform 0.2s ease;
+        }
+
+        .blog-post-card:hover .read-more {
+            color: #1a1a1a;
+        }
+
+        .blog-post-card:hover .read-more i {
+            transform: translateX(3px);
         }
 
         .post-metadata {
@@ -79,6 +131,124 @@
             font-size: 0.9rem;
             color: #1a1a1a;
         }
+
+        /* The "Letter" Overlay */
+        .post-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 1.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+        }
+
+        .post-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .post-overlay-backdrop {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(26, 26, 26, 0.45);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        .post-letter {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 880px;
+            max-height: 100%;
+            background: #fff;
+            border-radius: 6px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
+            transform: translateY(12px) scale(0.99);
+            transition: transform 0.25s ease;
+        }
+
+        .post-overlay.open .post-letter {
+            transform: none;
+        }
+
+        .post-letter-scroll {
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 3.5rem 4.5rem 2.5rem;
+        }
+
+        .post-letter-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1;
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 50%;
+            background: #f0f0f0;
+            color: #1a1a1a;
+            font-size: 0.9rem;
+            line-height: 1;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .post-letter-close:hover {
+            background: #e5e5e5;
+        }
+
+        .post-letter-title {
+            font-weight: 700;
+            letter-spacing: -1px;
+            font-size: 2.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .post-letter .post-content {
+            line-height: 1.75;
+        }
+
+        .post-letter .post-content img {
+            max-width: 100%;
+        }
+
+        .post-letter .post-content pre {
+            overflow-x: auto;
+            background: #fafafa;
+            padding: 1rem;
+            border-radius: 6px;
+        }
+
+        body.overlay-open {
+            overflow: hidden;
+        }
+
+        @media (max-width: 576px) {
+            .post-overlay {
+                padding: 1rem;
+            }
+
+            .post-letter-scroll {
+                padding: 3rem 1.5rem 2rem;
+            }
+
+            .post-letter-title {
+                font-size: 1.75rem;
+            }
+        }
     </style>
 </head>
 
@@ -100,11 +270,32 @@
         <section id="blog-section">
             <div class="blog-header">
                 <h1 class="name">\log(flow)</h1>
-                <span class="blog-subtitle">Notes on Embodied Intelligence and Beyond</span>
+                <span class="blog-subtitle">Adventures in Embodied Intelligence and Beyond</span>
             </div>
             <div id="blog-posts">
             </div>
         </section>
+    </div>
+
+    <div class="post-overlay" id="post-overlay" role="dialog" aria-modal="true" aria-labelledby="overlay-title"
+        aria-hidden="true">
+        <div class="post-overlay-backdrop" data-close></div>
+        <div class="post-letter">
+            <button class="post-letter-close" type="button" aria-label="close post" data-close>
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="post-letter-scroll">
+                <h2 class="post-letter-title" id="overlay-title"></h2>
+                <div class="post-metadata" id="overlay-metadata"></div>
+                <div class="post-content" id="overlay-content"></div>
+                <div class="like-container">
+                    <button class="like-button" id="overlay-like-button">
+                        <i class="far fa-heart"></i> like
+                    </button>
+                    <span class="like-count" id="overlay-like-count">0</span>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="social-icons d-flex justify-content-center fixed-bottom">
@@ -125,20 +316,28 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const postsContainer = document.getElementById('blog-posts');
+            const overlay = document.getElementById('post-overlay');
+            const overlayScroll = overlay.querySelector('.post-letter-scroll');
+            const overlayTitle = document.getElementById('overlay-title');
+            const overlayMetadata = document.getElementById('overlay-metadata');
+            const overlayContent = document.getElementById('overlay-content');
+            const overlayLikeButton = document.getElementById('overlay-like-button');
+            const overlayLikeCount = document.getElementById('overlay-like-count');
 
-            // 1. Load Posts
+            const cardLikeControls = {};
+            let openedPost = null;
+            let lastFocused = null;
+
+            // 1. Load Posts (kept in the order listed by posts.json)
             fetch('../posts.json')
                 .then(res => res.json())
+                .then(files => Promise.all(files.map(postFile =>
+                    fetch(`../_posts/${postFile}`)
+                        .then(res => res.text())
+                        .then(text => parseMarkdown(text, postFile))
+                )))
                 .then(posts => {
-                    posts.forEach(postFile => {
-                        fetch(`../_posts/${postFile}`)
-                            .then(res => res.text())
-                            .then(text => {
-                                const post = parseMarkdown(text, postFile);
-                                const postCard = createPostCard(post);
-                                postsContainer.appendChild(postCard);
-                            });
-                    });
+                    posts.forEach(post => postsContainer.appendChild(createPostCard(post)));
                 });
 
             // 2. Navbar Reveal
@@ -167,59 +366,125 @@
                 return { ...meta, content: content.trim(), slug: filename.replace('.md', '') };
             }
 
-            // 4. Card Creator (Only 1 Like Button)
+            // 4. Card Creator (preview only, the full post lives in the overlay)
             function createPostCard(post) {
-                const card = document.createElement('div');
+                const card = document.createElement('article');
                 card.className = 'card blog-post-card shadow-sm';
+                card.setAttribute('role', 'button');
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('aria-label', `read ${post.title || 'Untitled'}`);
                 card.innerHTML = `
                     <div class="card-body">
                         <h2 class="card-title" style="font-weight:700; letter-spacing:-0.5px;">${post.title || 'Untitled'}</h2>
                         <div class="post-metadata">By ${post.author || 'Robin Jacobs'} • ${post.date || ''}</div>
-                        <div class="post-content">${marked.parse(post.content)}</div>
-                        <div class="like-container">
-                            <button class="like-button">
-                                <i class="far fa-heart"></i> like
-                            </button>
-                            <span class="like-count">0</span>
+                        <p class="post-excerpt"></p>
+                        <div class="card-actions">
+                            <div class="like-container">
+                                <button class="like-button">
+                                    <i class="far fa-heart"></i> like
+                                </button>
+                                <span class="like-count">0</span>
+                            </div>
+                            <span class="read-more">read post <i class="fas fa-arrow-right"></i></span>
                         </div>
                     </div>`;
 
-                const btn = card.querySelector('.like-button');
-                const countSpan = card.querySelector('.like-count');
+                card.querySelector('.post-excerpt').textContent = excerptOf(post);
 
-                // Initialize logic for this specific card
-                handleLikeLogic(btn, countSpan, post.slug);
+                const btn = card.querySelector('.like-button');
+                cardLikeControls[post.slug] = { button: btn, countSpan: card.querySelector('.like-count') };
+                paintLikes(post.slug);
+
+                // Liking must not open the letter
+                btn.addEventListener('click', e => {
+                    e.stopPropagation();
+                    toggleLike(post.slug);
+                });
+
+                card.addEventListener('click', () => openPost(post, card));
+                card.addEventListener('keydown', e => {
+                    if (e.target !== card) return; // let the like button handle its own keys
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        openPost(post, card);
+                    }
+                });
 
                 return card;
             }
 
-            // 5. Like Logic
-            function handleLikeLogic(button, countSpan, slug) {
-                let count = parseInt(localStorage.getItem(`likes-${slug}`) || '0');
-                let isLiked = localStorage.getItem(`hasLiked-${slug}`) === 'true';
+            // 5. Excerpt (markdown stripped down to plain text)
+            function excerptOf(post, maxChars = 220) {
+                const holder = document.createElement('div');
+                holder.innerHTML = marked.parse(post.content);
+                const text = (holder.textContent || '').replace(/\s+/g, ' ').trim();
+                return text.length > maxChars ? text.slice(0, maxChars).trimEnd() + '…' : text;
+            }
 
+            // 6. Overlay
+            function openPost(post, trigger) {
+                openedPost = post;
+                lastFocused = trigger || null;
+
+                overlayTitle.textContent = post.title || 'Untitled';
+                overlayMetadata.textContent = `By ${post.author || 'Robin Jacobs'} • ${post.date || ''}`;
+                overlayContent.innerHTML = marked.parse(post.content);
+                paintLikes(post.slug);
+
+                const scrollbar = window.innerWidth - document.documentElement.clientWidth;
+                if (scrollbar > 0) document.body.style.paddingRight = `${scrollbar}px`;
+                document.body.classList.add('overlay-open');
+
+                overlay.classList.add('open');
+                overlay.setAttribute('aria-hidden', 'false');
+                overlayScroll.scrollTop = 0;
+                overlay.querySelector('.post-letter-close').focus();
+            }
+
+            function closePost() {
+                if (!openedPost) return;
+                openedPost = null;
+                overlay.classList.remove('open');
+                overlay.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('overlay-open');
+                document.body.style.paddingRight = '';
+                if (lastFocused) lastFocused.focus();
+            }
+
+            overlay.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closePost));
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape') closePost();
+            });
+            overlayLikeButton.addEventListener('click', () => {
+                if (openedPost) toggleLike(openedPost.slug);
+            });
+
+            // 7. Like Logic (card and overlay stay in sync)
+            function readLikes(slug) {
+                return {
+                    count: parseInt(localStorage.getItem(`likes-${slug}`) || '0', 10),
+                    isLiked: localStorage.getItem(`hasLiked-${slug}`) === 'true'
+                };
+            }
+
+            function paintControl(button, countSpan, slug) {
+                const { count, isLiked } = readLikes(slug);
                 countSpan.textContent = count;
-                if (isLiked) {
-                    button.classList.add('liked');
-                    button.querySelector('i').className = 'fas fa-heart';
-                }
+                button.classList.toggle('liked', isLiked);
+                button.querySelector('i').className = isLiked ? 'fas fa-heart' : 'far fa-heart';
+            }
 
-                button.addEventListener('click', () => {
-                    if (!isLiked) {
-                        count++;
-                        isLiked = true;
-                        button.classList.add('liked');
-                        button.querySelector('i').className = 'fas fa-heart';
-                    } else {
-                        count--;
-                        isLiked = false;
-                        button.classList.remove('liked');
-                        button.querySelector('i').className = 'far fa-heart';
-                    }
-                    countSpan.textContent = count;
-                    localStorage.setItem(`likes-${slug}`, count);
-                    localStorage.setItem(`hasLiked-${slug}`, isLiked);
-                });
+            function paintLikes(slug) {
+                const control = cardLikeControls[slug];
+                if (control) paintControl(control.button, control.countSpan, slug);
+                if (openedPost && openedPost.slug === slug) paintControl(overlayLikeButton, overlayLikeCount, slug);
+            }
+
+            function toggleLike(slug) {
+                const { count, isLiked } = readLikes(slug);
+                localStorage.setItem(`likes-${slug}`, isLiked ? count - 1 : count + 1);
+                localStorage.setItem(`hasLiked-${slug}`, String(!isLiked));
+                paintLikes(slug);
             }
         });
     </script>
