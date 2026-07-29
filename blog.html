@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="../assets/styles.css">
+    <link rel="stylesheet" href="../assets/applets.css">
 
     <style>
         /* Blog Specific Styles */
@@ -256,13 +257,20 @@
     <nav id="navbar-ph" class="navbar navbar-expand-sm fixed-top">
         <div class="container">
             <a class="navbar-brand" href="../index.html">robin jacobs</a>
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item"><a class="nav-link" href="../index.html#about">about</a></li>
-                <li class="nav-item"><a class="nav-link" href="../index.html#work">work</a></li>
-                <li class="nav-item"><a class="nav-link" href="../index.html#cv">cv</a></li>
-                <li class="nav-item"><a class="nav-link" href="gallery.html">photography</a></li>
-                <li class="nav-item active"><a class="nav-link" href="#">blog</a></li>
-            </ul>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="border: none;">
+                <span class="navbar-toggler-icon"
+                    style="background-image: url('data:image/svg+xml;charset=utf8,%3Csvg viewBox=%270 0 30 30%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cpath stroke=%27%23000%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-miterlimit=%2710%27 d=%27M4 7h22M4 15h22M4 23h22%27/%3E%3C/svg%3E');"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="../index.html#about">about</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../index.html#work">work</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../index.html#cv">cv</a></li>
+                    <li class="nav-item"><a class="nav-link" href="gallery.html">photography</a></li>
+                    <li class="nav-item active"><a class="nav-link" href="#">blog</a></li>
+                </ul>
+            </div>
         </div>
     </nav>
 
@@ -311,7 +319,10 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="../assets/applets.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -413,10 +424,11 @@
                 return card;
             }
 
-            // 5. Excerpt (markdown stripped down to plain text)
+            // 5. Excerpt (markdown stripped down to plain text, applet blocks dropped)
             function excerptOf(post, maxChars = 220) {
+                const prose = post.content.replace(/```applet[\s\S]*?```/g, '');
                 const holder = document.createElement('div');
-                holder.innerHTML = marked.parse(post.content);
+                holder.innerHTML = marked.parse(prose);
                 const text = (holder.textContent || '').replace(/\s+/g, ' ').trim();
                 return text.length > maxChars ? text.slice(0, maxChars).trimEnd() + '…' : text;
             }
@@ -429,7 +441,11 @@
                 overlayTitle.textContent = post.title || 'Untitled';
                 overlayMetadata.textContent = `By ${post.author || 'Robin Jacobs'} • ${post.date || ''}`;
                 overlayContent.innerHTML = marked.parse(post.content);
+                Applets.mount(overlayContent);
                 paintLikes(post.slug);
+
+                // A mobile menu left open would sit behind the letter
+                document.getElementById('navbarNav').classList.remove('show');
 
                 const scrollbar = window.innerWidth - document.documentElement.clientWidth;
                 if (scrollbar > 0) document.body.style.paddingRight = `${scrollbar}px`;
@@ -444,6 +460,7 @@
             function closePost() {
                 if (!openedPost) return;
                 openedPost = null;
+                Applets.unmountAll();
                 overlay.classList.remove('open');
                 overlay.setAttribute('aria-hidden', 'true');
                 document.body.classList.remove('overlay-open');
