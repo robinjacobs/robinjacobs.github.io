@@ -126,13 +126,6 @@
             color: #fff;
         }
 
-        .like-count {
-            margin-left: 12px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: #1a1a1a;
-        }
-
         /* The "Letter" Overlay */
         .post-overlay {
             position: fixed;
@@ -300,7 +293,6 @@
                     <button class="like-button" id="overlay-like-button">
                         <i class="far fa-heart"></i> like
                     </button>
-                    <span class="like-count" id="overlay-like-count">0</span>
                 </div>
             </div>
         </div>
@@ -333,7 +325,6 @@
             const overlayMetadata = document.getElementById('overlay-metadata');
             const overlayContent = document.getElementById('overlay-content');
             const overlayLikeButton = document.getElementById('overlay-like-button');
-            const overlayLikeCount = document.getElementById('overlay-like-count');
 
             const cardLikeControls = {};
             let openedPost = null;
@@ -394,7 +385,6 @@
                                 <button class="like-button">
                                     <i class="far fa-heart"></i> like
                                 </button>
-                                <span class="like-count">0</span>
                             </div>
                             <span class="read-more">read post <i class="fas fa-arrow-right"></i></span>
                         </div>
@@ -403,7 +393,7 @@
                 card.querySelector('.post-excerpt').textContent = excerptOf(post);
 
                 const btn = card.querySelector('.like-button');
-                cardLikeControls[post.slug] = { button: btn, countSpan: card.querySelector('.like-count') };
+                cardLikeControls[post.slug] = btn;
                 paintLikes(post.slug);
 
                 // Liking must not open the letter
@@ -479,27 +469,24 @@
             // 7. Like Logic (card and overlay stay in sync)
             function readLikes(slug) {
                 return {
-                    count: parseInt(localStorage.getItem(`likes-${slug}`) || '0', 10),
                     isLiked: localStorage.getItem(`hasLiked-${slug}`) === 'true'
                 };
             }
 
-            function paintControl(button, countSpan, slug) {
-                const { count, isLiked } = readLikes(slug);
-                countSpan.textContent = count;
+            function paintControl(button, slug) {
+                const { isLiked } = readLikes(slug);
                 button.classList.toggle('liked', isLiked);
                 button.querySelector('i').className = isLiked ? 'fas fa-heart' : 'far fa-heart';
             }
 
             function paintLikes(slug) {
-                const control = cardLikeControls[slug];
-                if (control) paintControl(control.button, control.countSpan, slug);
-                if (openedPost && openedPost.slug === slug) paintControl(overlayLikeButton, overlayLikeCount, slug);
+                const button = cardLikeControls[slug];
+                if (button) paintControl(button, slug);
+                if (openedPost && openedPost.slug === slug) paintControl(overlayLikeButton, slug);
             }
 
             function toggleLike(slug) {
-                const { count, isLiked } = readLikes(slug);
-                localStorage.setItem(`likes-${slug}`, isLiked ? count - 1 : count + 1);
+                const { isLiked } = readLikes(slug);
                 localStorage.setItem(`hasLiked-${slug}`, String(!isLiked));
                 paintLikes(slug);
             }
